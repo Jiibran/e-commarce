@@ -109,3 +109,48 @@ def delete_product(product_id):
 
     cur.close()
     return jsonify({'message': 'Product deleted successfully'})
+
+@product_bp.route('/categories', methods=['GET'])
+def get_all_categories():
+    # Connect to the database
+    cur = mysql.connection.cursor()
+
+    # Execute the SELECT query
+    cur.execute("SELECT * FROM categories")
+
+    # Fetch all results
+    categories = cur.fetchall()
+
+    # Close the cursor
+    cur.close()
+
+    # Check if categories were found
+    if categories:
+        return jsonify({'categories': categories})
+    else:
+        return jsonify({'message': 'No categories found'}), 404
+    
+@product_bp.route('/products/<int:product_id>/categories', methods=['GET'])
+def get_product_with_categories(product_id):
+    # Connect to the database
+    cur = mysql.connection.cursor()
+
+    # Execute the SELECT query with JOIN to fetch product and its category
+    cur.execute("""
+        SELECT p.id, p.name, p.description, p.price, c.id AS category_id, c.name AS category_name
+        FROM products p
+        JOIN categories c ON p.category_id = c.id
+        WHERE p.id = %s
+    """, (product_id,))
+
+    # Fetch the result
+    product = cur.fetchone()
+
+    # Close the cursor
+    cur.close()
+
+    # Check if the product was found
+    if product:
+        return jsonify({'product': product})
+    else:
+        return jsonify({'message': 'Product not found'}), 404
