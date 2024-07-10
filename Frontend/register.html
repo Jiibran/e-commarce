@@ -174,11 +174,6 @@
       const password = document.getElementById('password').value;
 
   
-      if (password !== confirmPassword) {
-        alert('Passwords do not match!');
-        return;
-      }
-  
       // Prepare the data to be sent in the request, now including the username
       const data = { username, email, password };
   
