@@ -12,16 +12,16 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
 
-db:
-  image: mariadb:latest
-  volumes:
-    - db-data:/var/lib/mysql
-  environment:
-    MYSQL_ROOT_PASSWORD: rootpassword
-    MYSQL_DATABASE: dbname
-    MYSQL_USER: user
-    MYSQL_PASSWORD: password
-    MARIADB_AUTO_UPGRADE: 1
+  db:
+    image: mariadb:latest
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: dbname
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MARIADB_AUTO_UPGRADE: 1
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -30,8 +30,5 @@ db:
       MYSQL_ROOT_PASSWORD: rootpassword
     ports:
       - "8080:80"
-    depends_on:
-      - db
-
 volumes:
   db-data:
