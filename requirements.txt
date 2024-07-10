@@ -1,3 +1,6 @@
-Flask
-Flask-JWT-Extended
-Werkzeug
+Flask==2.0.1
+Flask-JWT-Extended==4.3.1
+Werkzeug==2.0.1
+Flask-Cors==3.0.10
+mysql-connector-python==8.0.23
+flask_mysqldb
