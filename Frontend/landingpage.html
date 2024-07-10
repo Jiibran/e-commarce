@@ -149,7 +149,7 @@
       <div class="col-md-2 text-end">
         <a href="login.html" id="loginButton" class="btn btn-outline-warning me-2">Login</a>
         <a href="register.html" id="registerButton" class="btn btn-dark">Sign-up</a>
-        <a href="register.html" id="logoutButton" class="btn btn-dark">Logout</a>
+        <a id="logoutButton" class="btn btn-dark">Logout</a>
       </div>
     </div>
   </nav>
@@ -432,6 +432,21 @@
       document.getElementById('logoutButton').style.display = 'none';
     }
   });
+  document.addEventListener('DOMContentLoaded', function() {
+    // Select the logout button by its ID
+    const logoutButton = document.getElementById('logoutButton');
+
+    // Add click event listener to the logout button
+    logoutButton.addEventListener('click', function() {
+      // Remove the access token from local storage
+      localStorage.removeItem('token');
+
+      // Optionally, redirect the user to the login page or refresh the page
+      window.location.href = 'login.html'; // Redirect to login page
+      // window.location.reload(); // Or simply reload the current page
+    });
+
+  }); 
   </script>
 </body>
 </html>
