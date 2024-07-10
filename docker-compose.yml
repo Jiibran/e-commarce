@@ -21,6 +21,8 @@ services:
       MYSQL_DATABASE: dbname
       MYSQL_USER: user
       MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
