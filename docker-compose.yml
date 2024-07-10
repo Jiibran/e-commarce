@@ -3,14 +3,14 @@ services:
   db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword  # Root password is set here
+      MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: dbname
     volumes:
       - ./app:/docker-entrypoint-initdb.d
       - dbdata:/var/lib/mysql
     ports:
       - "3306:3306"
-    container_name: db_container  # Custom container name for the db service
+    container_name: db_container
 
   app:
     build: .
@@ -19,12 +19,24 @@ services:
     depends_on:
       - db
     environment:
-      MYSQL_HOST: db_container  # Connects to the db service
-      MYSQL_USER: root  # Use root user
-      MYSQL_PASSWORD: rootpassword  # Use root password set in db service
+      MYSQL_HOST: db_container
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
       MYSQL_DB: dbname
       SECRET_KEY: your_secret_key
     container_name: app_container
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db_container
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    container_name: phpmyadmin_container
+
 volumes:
-  db-data:
+  dbdata:
