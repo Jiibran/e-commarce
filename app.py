@@ -16,13 +16,16 @@ CORS(app)
 
 @app.route('/')
 def home():
-    with app.app_context():
-        cursor = mysql.connection.cursor()
-        # Example query - adjust to your needs
-        cursor.execute("SELECT * FROM users")
-        data = cursor.fetchall()
-        cursor.close()
-        return str(data)
+    try:
+        with app.app_context():
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT * FROM users")
+            data = cursor.fetchall()
+            cursor.close()
+            return jsonify(data)
+    except Exception as e:
+        app.logger.error(f"Database connection error: {e}")
+        return "Database connection error", 500
     # return 'E-commerce API is running'
 
 # @jwt.token_in_blocklist_loader
