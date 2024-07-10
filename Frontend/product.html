@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="product-container">
+        <h1 id="product-name">Product Name</h1>
+        <img id="product-image" src="" alt="Product Image" />
+        <p id="product-description">Product Description</p>
+        <p id="product-price">Product Price</p>
+        <!-- Add more product details as needed -->
+    </div>
+
+    <script>
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('product_id');
+        }
+
+        function fetchProductDetails(productId) {
+            fetch(`http://174.138.27.151:5000/api/products/${productId}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayProductDetails(data);
+            })
+            .catch(error => console.error('Error fetching product details:', error));
+        }
+
+        function displayProductDetails(product) {
+            document.getElementById('product-name').textContent = product.name;
+            document.getElementById('product-image').src = product.image_url;
+            document.getElementById('product-description').textContent = product.description;
+            document.getElementById('product-price').textContent = `$${product.price}`;
+            // Add more fields as necessary
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const productId = getProductIdFromUrl();
+            if (productId) {
+                fetchProductDetails(productId);
+            } else {
+                console.error('Product ID is missing in the URL');
+            }
+        });
+    </script>
+</body>
+</html>
