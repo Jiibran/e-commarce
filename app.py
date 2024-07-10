@@ -3,27 +3,29 @@ from flask_jwt_extended import JWTManager, decode_token
 from config import Config
 from models import init_app, mysql, token_exists, save_token, delete_token
 from routes import auth_bp, product_bp, cart_bp, order_bp, payment_bp, shipping_bp
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 jwt = JWTManager(app)
 init_app(app)
+CORS(app)
 
 @app.route('/')
 def home():
     return 'E-commerce API is running'
 
-@jwt.token_in_blocklist_loader
-def check_if_token_in_blocklist(jwt_header, jwt_payload):
-   jti = jwt_payload['jti']
-   return not token_exists(jti)
-# blocklist = set()
-
 # @jwt.token_in_blocklist_loader
 # def check_if_token_in_blocklist(jwt_header, jwt_payload):
-#     jti = jwt_payload['jti']
-#     return jti in blocklist
+#    jti = jwt_payload['jti']
+#    return not token_exists(jti)
+blocklist = set()
+
+@jwt.token_in_blocklist_loader
+def check_if_token_in_blocklist(jwt_header, jwt_payload):
+    jti = jwt_payload['jti']
+    return jti in blocklist
 
 # @jwt.revoked_token_loader
 # def revoked_token_callback(jwt_header, jwt_payload):
