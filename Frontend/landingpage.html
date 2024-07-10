@@ -472,20 +472,18 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
       const productsContainer = document.querySelector('#products-container');
       data.forEach(product => {
-        // Assuming product is an array with the following order:
-        // [product_id, name, description, price, stock, imageUrl]
         const productHTML = `
           <div class="col mb-5">
             <div class="card h-100 product-card">
-              <!-- Access the image URL at index 5 -->
-              <img class="card-img-top" src="${product[5]}" alt="..." />
+              <!-- Access the image URL directly -->
+              <img class="card-img-top" src="${product.image_url}" alt="..." />
               <div class="card-body p-4">
                 <div class="text-center">
-                  <!-- Access the name at index 1 -->
-                  <h5 class="fw-bolder">${product[1]}</h5>
+                  <!-- Access the name directly -->
+                  <h5 class="fw-bolder">${product.name}</h5>
                   <div class="d-flex justify-content-center small mb-2"></div>
-                  <!-- Access the price at index 3 -->
-                  ${product[3]}
+                  <!-- Access the price directly -->
+                  ${product.price}
                 </div>
               </div>
             </div>
