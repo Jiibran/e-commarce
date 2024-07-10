@@ -4,10 +4,11 @@ FROM python:3.8-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies for mysqlclient
+# Install system dependencies for mysqlclient and pkg-config
 RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
+    pkg-config \  # Added pkg-config here
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the current directory contents into the container at /app
