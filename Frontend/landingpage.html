@@ -149,6 +149,7 @@
       <div class="col-md-2 text-end">
         <a href="login.html" id="loginButton" class="btn btn-outline-warning me-2">Login</a>
         <a href="register.html" id="registerButton" class="btn btn-dark">Sign-up</a>
+        <a href="register.html" id="logoutButton" class="btn btn-dark">Logout</a>
       </div>
     </div>
   </nav>
@@ -418,11 +419,17 @@
       });
     });
     document.addEventListener('DOMContentLoaded', function() {
-    // Check if the access token exists in local storage
-    if (localStorage.getItem('token')) {
-      // If the token exists, hide the login and register buttons
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Token exists, user is presumably logged in
       document.getElementById('loginButton').style.display = 'none';
       document.getElementById('registerButton').style.display = 'none';
+      document.getElementById('logoutButton').style.display = 'block';
+    } else {
+      // No token found, user is not logged in
+      document.getElementById('loginButton').style.display = 'block';
+      document.getElementById('registerButton').style.display = 'block';
+      document.getElementById('logoutButton').style.display = 'none';
     }
   });
   </script>
