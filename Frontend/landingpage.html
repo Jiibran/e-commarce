@@ -307,7 +307,7 @@
           </div>
         </div>
       </div>
-      <div id="products-container"></div>
+      <div id="products-container" class="row"></div>
     </section>
   </main>
 
@@ -466,40 +466,35 @@ fetch('https://example.com/api/logout', {
 
 }); 
 
-async function fetchProducts() {
-    try {
-        const response = await fetch('http://174.138.27.151:5000/api/products'); // Ensure this is your correct API endpoint
-        const products = await response.json();
-        
-        const productsContainer = document.getElementById('products-container'); // Ensure this container exists in your HTML
-        productsContainer.innerHTML = ''; // Clear existing products before adding new ones
-        
-        products.forEach(product => {
-            const productElement = document.createElement('div');
-            productElement.className = 'card';
-            productElement.innerHTML = `
-                <div class="card-body">
-                    <h5>${product.name}</h5>
-                    <p>${product.description}</p>
-                    <p>Price: $${product.price}</p>
-                    <p>Stock: ${product.stock}</p>
-                    <img src="${product.image_url}" alt="${product.name}" style="width:100px;height:auto;">
-                    <!-- Add more product details here -->
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('http://174.138.27.151:5000/api/products')
+    .then(response => response.json())
+    .then(data => {
+      const productsContainer = document.querySelector('#products-container');
+      data.forEach(product => {
+        // Assuming product is an array with the following order:
+        // [product_id, name, description, price, stock, imageUrl]
+        const productHTML = `
+          <div class="col mb-5">
+            <div class="card h-100 product-card">
+              <!-- Access the image URL at index 5 -->
+              <img class="card-img-top" src="${product[5]}" alt="..." />
+              <div class="card-body p-4">
+                <div class="text-center">
+                  <!-- Access the name at index 1 -->
+                  <h5 class="fw-bolder">${product[1]}</h5>
+                  <div class="d-flex justify-content-center small mb-2"></div>
+                  <!-- Access the price at index 3 -->
+                  ${product[3]}
                 </div>
-            `;
-            productsContainer.appendChild(productElement);
-        });
-    } catch (error) {
-        console.error('Failed to fetch products:', error);
-    }
-}
-
-  // Initial fetch
-  fetchProducts();
-
-  // Poll for new products every 30 seconds
-  setInterval(fetchProducts, 30000);
-
+              </div>
+            </div>
+          </div>
+        `;
+        productsContainer.innerHTML += productHTML;
+      });
+    });
+});
   </script>
 </body>
 </html>
