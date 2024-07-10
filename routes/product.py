@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from . import product_bp
 from models import mysql, save_token, delete_token, token_exists
+from decimal import Decimal
 
 @product_bp.route('/products', methods=['GET'])
 def get_products():
@@ -9,20 +10,30 @@ def get_products():
     cur = mysql.connection.cursor()
 
     if category_id:
-        # Query to fetch products by category
         cur.execute("""
             SELECT p.* FROM products p
             JOIN product_categories pc ON p.id = pc.product_id
             WHERE pc.category_id = %s
         """, (category_id,))
     else:
-        # Query to fetch all products if no category_id is provided
         cur.execute("SELECT * FROM products")
 
     products = cur.fetchall()
     cur.close()
 
-    return jsonify([{'product_id': p[0], 'name': p[1], 'description': p[2], 'price': p[3], 'stock': p[4], 'image_url': p[5]} for p in products])
+    # Convert Decimal to float for JSON serialization
+    products_list = [
+        {
+            'product_id': p[0], 
+            'name': p[1], 
+            'description': p[2], 
+            'price': float(p[3]) if isinstance(p[3], Decimal) else p[3], 
+            'stock': p[4], 
+            'image_url': p[5]
+        } for p in products
+    ]
+
+    return jsonify(products_list)
 
 @product_bp.route('/products/<int:product_id>', methods=['GET'])
 def get_product(product_id):
