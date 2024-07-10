@@ -16,7 +16,14 @@ CORS(app)
 
 @app.route('/')
 def home():
-    return 'E-commerce API is running'
+    with app.app_context():
+        cursor = mysql.connection.cursor()
+        # Example query - adjust to your needs
+        cursor.execute("SELECT * FROM users")
+        data = cursor.fetchall()
+        cursor.close()
+        return str(data)
+    # return 'E-commerce API is running'
 
 # @jwt.token_in_blocklist_loader
 # def check_if_token_in_blocklist(jwt_header, jwt_payload):
