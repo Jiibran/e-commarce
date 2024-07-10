@@ -7,6 +7,9 @@ RUN rm /usr/share/nginx/html/index.html
 # Copy the static content (HTML, CSS, JS) to the Nginx server
 COPY . /usr/share/nginx/html
 
+# Correct permissions for the Nginx server
+RUN chmod -R 755 /usr/share/nginx/html
+
 # Expose port 80 to the Docker host, so we can access the Nginx server
 EXPOSE 80
 
