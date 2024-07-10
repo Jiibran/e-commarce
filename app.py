@@ -4,9 +4,11 @@ from config import Config
 from models import init_app, mysql, token_exists, save_token, delete_token
 from routes import auth_bp, product_bp, cart_bp, order_bp, payment_bp, shipping_bp
 from flask_cors import CORS
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 app.config.from_object(Config)
+mysql = MySQL(app)
 
 jwt = JWTManager(app)
 init_app(app)
