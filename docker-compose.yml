@@ -13,7 +13,7 @@ services:
       MYSQL_PASSWORD: password
 
   db:
-    image: mysql:latest
+    image: mariadb:latest
     volumes:
       - db-data:/var/lib/mysql
     environment:
