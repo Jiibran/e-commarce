@@ -8,8 +8,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
-    pkg-config \  # Added pkg-config here
-    && rm -rf /var/lib/apt/lists/*
+    pkg-config \  
+    && rm -rf /var/lib/apt/lists/* 
 
 # Copy the current directory contents into the container at /app
 COPY . /app
