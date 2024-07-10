@@ -42,7 +42,16 @@ def get_product(product_id):
     product = cur.fetchone()
     cur.close()
     if product:
-        return jsonify({'product_id': product[0], 'name': product[1], 'description': product[2], 'price': product[3], 'stock': product[4], 'image_url': product[5]})
+        # Convert Decimal to float for JSON serialization
+        product_dict = {
+            'product_id': product[0], 
+            'name': product[1], 
+            'description': product[2], 
+            'price': float(product[3]) if isinstance(product[3], Decimal) else product[3], 
+            'stock': product[4], 
+            'image_url': product[5]
+        }
+        return jsonify(product_dict)
     else:
         return jsonify({'message': 'Product not found'}), 404
 
