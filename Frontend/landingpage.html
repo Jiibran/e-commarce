@@ -307,6 +307,7 @@
           </div>
         </div>
       </div>
+      <div id="products-container"></div>
     </section>
   </main>
 
@@ -464,6 +465,41 @@ fetch('https://example.com/api/logout', {
 });
 
 }); 
+
+async function fetchProducts() {
+    try {
+        const response = await fetch('http://174.138.27.151:5000/api/products'); // Ensure this is your correct API endpoint
+        const products = await response.json();
+        
+        const productsContainer = document.getElementById('products-container'); // Ensure this container exists in your HTML
+        productsContainer.innerHTML = ''; // Clear existing products before adding new ones
+        
+        products.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.className = 'card';
+            productElement.innerHTML = `
+                <div class="card-body">
+                    <h5>${product.name}</h5>
+                    <p>${product.description}</p>
+                    <p>Price: $${product.price}</p>
+                    <p>Stock: ${product.stock}</p>
+                    <img src="${product.image_url}" alt="${product.name}" style="width:100px;height:auto;">
+                    <!-- Add more product details here -->
+                </div>
+            `;
+            productsContainer.appendChild(productElement);
+        });
+    } catch (error) {
+        console.error('Failed to fetch products:', error);
+    }
+}
+
+  // Initial fetch
+  fetchProducts();
+
+  // Poll for new products every 30 seconds
+  setInterval(fetchProducts, 30000);
+
   </script>
 </body>
 </html>
