@@ -16,30 +16,28 @@
     </div>
 
     <script>
-        function getProductIdFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('product_id');
-        }
-
         function fetchProductDetails(productId) {
             fetch(`http://174.138.27.151:5000/api/products/${productId}`, {
                 method: 'GET'
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data); // Debug: Log the data to see its structure
                 displayProductDetails(data);
             })
             .catch(error => console.error('Error fetching product details:', error));
         }
-
+    
         function displayProductDetails(product) {
+            console.log(product); // Debug: Ensure this logs the expected product object
             document.getElementById('product-name').textContent = product.name;
-            document.getElementById('product-image').src = product.image_url;
+            // Ensure the property name matches what's returned by the API
+            document.getElementById('product-image').src = product.image_url || 'default-image.jpg'; // Fallback for missing image
             document.getElementById('product-description').textContent = product.description;
+            // Check if price is nested or needs parsing
             document.getElementById('product-price').textContent = `$${product.price}`;
-            // Add more fields as necessary
         }
-
+    
         document.addEventListener('DOMContentLoaded', function() {
             const productId = getProductIdFromUrl();
             if (productId) {
@@ -48,6 +46,11 @@
                 console.error('Product ID is missing in the URL');
             }
         });
+    
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('product_id');
+        }
     </script>
 </body>
 </html>
