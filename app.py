@@ -7,7 +7,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config.from_object(Config)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://174.138.27.151:8081"}})
 
 jwt = JWTManager(app)
 init_app(app)
