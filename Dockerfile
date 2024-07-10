@@ -1,15 +1,8 @@
-# Use an official Python runtime as a parent image
+# Use the official Python 3.12.3 image as a parent image
 FROM python:3.12.3
 
 # Set the working directory in the container
 WORKDIR /app
-
-# Install system dependencies for mysqlclient and pkg-config
-RUN apt-get update && apt-get install -y \
-    default-libmysqlclient-dev \
-    build-essential \
-    pkg-config \  
-    && rm -rf /var/lib/apt/lists/* 
 
 # Copy the current directory contents into the container at /app
 COPY . /app
@@ -21,8 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # Define environment variable
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
+ENV NAME World
 
 # Run app.py when the container launches
-CMD ["flask", "run"]
+CMD ["python", "app.py"]
