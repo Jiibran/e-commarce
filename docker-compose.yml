@@ -27,6 +27,7 @@ services:
     container_name: app_container
     volumes:
       - .:/app
+    working_dir: /app  # Set the working directory to /app
     command: python3 app.py
 
   phpmyadmin:
