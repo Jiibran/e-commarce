@@ -3,9 +3,11 @@ from flask_jwt_extended import JWTManager, decode_token
 from config import Config
 from models import init_app, mysql, token_exists, save_token, delete_token
 from routes import auth_bp, product_bp, cart_bp, order_bp, payment_bp, shipping_bp
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config.from_object(Config)
+CORS(app)
 
 jwt = JWTManager(app)
 init_app(app)
