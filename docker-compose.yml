@@ -13,7 +13,7 @@ services:
     container_name: db_container
 
   app:
-    image: python:3.12.3
+    build: .
     ports:
       - "5000:5000"
     depends_on:
@@ -25,10 +25,6 @@ services:
       MYSQL_DB: dbname
       SECRET_KEY: your_secret_key
     container_name: app_container
-    volumes:
-      - .:/app
-    working_dir: /app  # Set the working directory to /app
-    command: python3 app.py
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -38,6 +34,8 @@ services:
       PMA_PASSWORD: rootpassword
     ports:
       - "8080:80"
+    depends_on:
+      - db
     container_name: phpmyadmin_container
 
 volumes:
