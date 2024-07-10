@@ -439,14 +439,31 @@
     // Add click event listener to the logout button
     logoutButton.addEventListener('click', function() {
       // Remove the access token from local storage
-      localStorage.removeItem('token');
+      const token = localStorage.getItem('token');
 
-      // Optionally, redirect the user to the login page or refresh the page
-      // window.location.href = 'login.html'; // Redirect to login page
-      window.location.reload(); // Or simply reload the current page
-    });
+// Call the logout API with the token
+fetch('https://example.com/api/logout', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  body: JSON.stringify({ token: token })
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Logout successful', data);
+  // Remove the access token from local storage
+  localStorage.removeItem('token');
 
-  }); 
+  // Optionally, redirect the user to the login page or refresh the page
+  // window.location.href = 'login.html'; // Redirect to login page
+  window.location.reload(); // Or simply reload the current page
+})
+
+});
+
+}); 
   </script>
 </body>
 </html>
