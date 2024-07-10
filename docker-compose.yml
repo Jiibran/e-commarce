@@ -12,6 +12,7 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
+    container_name: db_container
 
   app:
     build: .
@@ -20,10 +21,12 @@ services:
     depends_on:
       - db
     environment:
-      MYSQL_HOST: db
+      MYSQL_HOST: db_container  # Updated to use the container name of the db service
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DB: dbname
       SECRET_KEY: your_secret_key
+    container_name: app_container
+
 volumes:
   db-data:
