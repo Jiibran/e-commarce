@@ -166,18 +166,44 @@
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('registerForm').addEventListener('submit', function(event) {
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
       event.preventDefault();
+      const username = document.getElementById('username').value; // Get the username from the form
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
-
+  
       if (password !== confirmPassword) {
         alert('Passwords do not match!');
         return;
       }
-
-      alert('Registration successful!');
+  
+      // Prepare the data to be sent in the request, now including the username
+      const data = { username, email, password };
+  
+      try {
+        // Send a POST request to the register API
+        const response = await fetch('http://174.138.27.151:5000/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (response.ok) {
+          // If the API call was successful
+          alert('Registration successful!');
+          window.location.href = 'login.html';
+          // Optionally, redirect the user or clear the form
+        } else {
+          // If the server responded with an error
+          alert('Registration failed: ' + (await response.json()).message);
+        }
+      } catch (error) {
+        // If the request failed to send
+        alert('Registration failed: ' + error.message);
+      }
     });
   </script>
 </body>
