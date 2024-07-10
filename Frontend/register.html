@@ -140,6 +140,11 @@
         <form id="registerForm">
           <h2>Register</h2>
           <div class="inputbox">
+            <ion-icon name="person-outline"></ion-icon>
+            <input type="text" id="username" required>
+            <label for="username">Username</label>
+          </div>
+          <div class="inputbox">
             <ion-icon name="mail-outline"></ion-icon>
             <input type="email" id="email" required>
             <label for="email">Email</label>
@@ -148,11 +153,6 @@
             <ion-icon name="lock-closed-outline"></ion-icon>
             <input type="password" id="password" required>
             <label for="password">Password</label>
-          </div>
-          <div class="inputbox">
-            <ion-icon name="lock-closed-outline"></ion-icon>
-            <input type="password" id="confirmPassword" required>
-            <label for="confirmPassword">Confirm Password</label>
           </div>
           <button type="submit">Register</button>
           <div class="register">
