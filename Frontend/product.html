@@ -40,17 +40,10 @@
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const variants = await response.json();
-        console.log(variants); // Log the response to see its structure
-
-        // Assuming the API returns an object with a property that is an array of variants
-        // For example, if the API response structure is { data: [variant1, variant2] }
-        // You would access the array like this: variants.data
-        // If the API directly returns an array, you can iterate over it as before
-        if (Array.isArray(variants)) {
-            displayProductVariants(variants);
-        } else if (variants.data && Array.isArray(variants.data)) {
-            displayProductVariants(variants.data); // Adjust according to the actual response structure
+        const data = await response.json();
+        // Access the variants array directly from the response object
+        if (data.variants && Array.isArray(data.variants)) {
+            displayProductVariants(data.variants);
         } else {
             throw new Error('Expected an array of variants, but got a different structure');
         }
