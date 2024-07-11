@@ -16,7 +16,7 @@
 });
 
 function fetchOrders() {
-    fetch('/api/orders')
+    fetch('http://174.138.27.151:5000/api/orders')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
