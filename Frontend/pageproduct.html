@@ -419,6 +419,16 @@ let harga
     }
 });
 
+let totalPrice
+function updateTotalPrice() {
+    const productPrice = parseFloat(document.getElementById('productPrice').innerText);
+    const quantity = parseInt(document.getElementById('quantityInput').value, 10) || 0;
+    
+    totalPrice = harga * quantity;
+    document.getElementById('productPrice').innerText = harga.toFixed(2); // Update the product price display
+    document.getElementById('totalPrice').innerText = totalPrice.toFixed(2); // Update the total price display
+  }
+
 
 document.getElementById('buyNowBtn').addEventListener('click', function() {
     document.getElementById('paymentModalBackdrop').style.display = 'flex'; // Show the modal and backdrop
@@ -474,14 +484,7 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
     }
 });
 
-function updateTotalPrice() {
-    const productPrice = parseFloat(document.getElementById('productPrice').innerText);
-    const quantity = parseInt(document.getElementById('quantityInput').value, 10) || 0;
-    
-    const totalPrice = harga * quantity;
-    document.getElementById('productPrice').innerText = harga.toFixed(2); // Update the product price display
-    document.getElementById('totalPrice').innerText = totalPrice.toFixed(2); // Update the total price display
-  }
+
 
   
   </script>
