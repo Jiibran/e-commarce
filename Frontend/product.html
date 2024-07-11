@@ -48,7 +48,7 @@
 // Adjusted fetchProductVariants to ensure variants is an array
 async function fetchProductVariants(productId) {
     try {
-        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}/variants`);
+        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}`);
         if (!response.ok) throw new Error('Failed to fetch product variants');
         const variants = await response.json();
         if (Array.isArray(variants)) {
