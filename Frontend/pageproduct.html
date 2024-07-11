@@ -243,6 +243,7 @@
       <div id="paymentModalBackdrop">
         <div id="paymentModal">
           <h2>Complete Your Payment</h2>
+          <input type="text" id="nameInput" placeholder="Your Name" class="form-control mb-3">
           <input type="file" id="fileUpload">
           <button id="uploadBtn">Upload Screenshot</button>
         </div>
@@ -378,31 +379,35 @@ document.getElementById('buyNowBtn').addEventListener('click', function() {
 
 document.getElementById('uploadBtn').addEventListener('click', function() {
     const fileInput = document.getElementById('fileUpload');
+    const nameInput = document.getElementById('nameInput');
     const file = fileInput.files[0];
-    if (file) {
-        const formData = new FormData();
-        formData.append('file', file);
+    const name = nameInput.value;
 
-        // Replace 'YOUR_DISCORD_WEBHOOK_URL' with your actual Discord webhook URL
+    if (file && name) {
+        const formData = new FormData();
+        formData.append('file', file); // Append the file
+        formData.append('payload_json', JSON.stringify({
+            content: `Name: ${name}` // Send the name as part of the content
+        }));
+
         fetch('https://discord.com/api/webhooks/1260933895185240115/1RmXxIo5Uq0c2pVpmTT6lVgZKJCSHONCqUMPVamnl2e-bXX4fW0qQC2PYh-bXUjP9b3k', {
             method: 'POST',
-            // Removed 'Content-Type' header
             body: formData
         })
         .then(response => {
             if (response.ok) {
-                alert('Screenshot uploaded successfully!');
-                document.getElementById('paymentModal').style.display = 'none';
+                alert('Information uploaded successfully!');
+                document.getElementById('paymentModalBackdrop').style.display = 'none';
             } else {
-                alert('Failed to upload screenshot.');
+                alert('Failed to upload information.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error uploading screenshot.');
+            alert('Error uploading information.');
         });
     } else {
-        alert('Please select a file to upload.');
+        alert('Please fill in all fields.');
     }
 });
 
