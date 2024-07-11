@@ -506,7 +506,7 @@ function generateProductCards(products) {
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Prevent the default form submission
     const searchField = document.getElementById('searchField').value;
-    fetch(`/products?searchField=${encodeURIComponent(searchField)}`)
+    fetch(`http://174.138.27.151:5000/api/products?searchField=${encodeURIComponent(searchField)}`)
         .then(response => response.json())
         .then(data => {
             displayResults(data);
