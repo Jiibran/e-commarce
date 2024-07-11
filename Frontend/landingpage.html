@@ -469,7 +469,7 @@ fetch('https://example.com/api/logout', {
 
 document.addEventListener('DOMContentLoaded', function() {
   // Fetch products from the API
-fetch('https://174.138.27.151:5000/api/products')
+fetch('http://174.138.27.151:5000/api/products')
   .then(response => response.json())
   .then(products => {
     generateProductCards(products);
