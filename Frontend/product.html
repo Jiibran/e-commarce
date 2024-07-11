@@ -57,13 +57,22 @@
             document.getElementById('product-price').textContent = `$${product.price}`;
         }
     
-        function displayProductVariants(variant) {
-            // Display product variant details
-            document.getElementById('variant-name').textContent = variant.name;
-            document.getElementById('variant-image').src = variant.image_url || 'default-variant-image.jpg'; // Fallback for missing variant image
-            document.getElementById('variant-description').textContent = variant.description;
-            document.getElementById('variant-price').textContent = `$${variant.price}`;
-        }
+        function displayProductVariants(variants) {
+    // Check if variants is an array and has at least one item
+    if (Array.isArray(variants) && variants.length > 0) {
+        // Example: Display the first variant's details
+        // You can adjust this to display all variants as needed
+        const firstVariant = variants[0];
+        document.getElementById('variant-name').textContent = firstVariant.name || 'Default Name';
+        document.getElementById('variant-image').src = firstVariant.image_url || 'default-variant-image.jpg';
+        document.getElementById('variant-description').textContent = firstVariant.description || 'Default Description';
+        document.getElementById('variant-price').textContent = `$${firstVariant.price || '0.00'}`;
+    } else {
+        console.error('No variants data available');
+        // Handle the case where no variants are available
+        // For example, hide the variants section or display a default message
+    }
+}
     
         document.addEventListener('DOMContentLoaded', function() {
             const productId = getProductIdFromUrl();
