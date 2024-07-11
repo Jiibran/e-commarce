@@ -174,3 +174,33 @@ def get_product_with_categories(product_id):
         return jsonify({'product': product})
     else:
         return jsonify({'message': 'Product not found'}), 404
+
+@product_bp.route('/product_variants', methods=['GET'])
+def get_product_variants():
+    product_id = request.args.get('product_id', None)
+    if not product_id:
+        return {"error": "Product ID is required"}, 400
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        SELECT variant_id, product_id, variant_name, price, stock
+        FROM product_variants
+        WHERE product_id = %s
+    """, (product_id,))
+
+    variants = cur.fetchall()
+    cur.close()
+
+    # Convert Decimal to float for JSON serialization and prepare the response
+    variants_list = [
+        {
+            'variant_id': v[0],
+            'product_id': v[1],
+            'variant_name': v[2],
+            'price': float(v[3]) if isinstance(v[3], Decimal) else v[3],
+            'stock': v[4]
+        } for v in variants
+    ]
+
+    return {"variants": variants_list}

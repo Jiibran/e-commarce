@@ -12,6 +12,14 @@
         <img id="product-image" src="" alt="Product Image" />
         <p id="product-description">Product Description</p>
         <p id="product-price">Product Price</p>
+        <!-- Product Variant Section -->
+        <div id="product-variant">
+            <h2>Product Variant</h2>
+            <p id="variant-name">Variant Name</p>
+            <img id="variant-image" src="" alt="Variant Image" />
+            <p id="variant-description">Variant Description</p>
+            <p id="variant-price">Variant Price</p>
+        </div>
         <!-- Add more product details as needed -->
     </div>
 
@@ -24,18 +32,37 @@
             .then(data => {
                 console.log(data); // Debug: Log the data to see its structure
                 displayProductDetails(data);
+                fetchProductVariants(productId); // Fetch variants after displaying product details
             })
             .catch(error => console.error('Error fetching product details:', error));
+        }
+    
+        function fetchProductVariants(productId) {
+            fetch(`http://174.138.27.151:5000/api/product_variants?product_id=${productId}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(variants => {
+                console.log(variants); // Debug: Log the variants to see its structure
+                displayProductVariants(variants[0]); // Assuming the first variant is to be displayed, adjust as needed
+            })
+            .catch(error => console.error('Error fetching product variants:', error));
         }
     
         function displayProductDetails(product) {
             console.log(product); // Debug: Ensure this logs the expected product object
             document.getElementById('product-name').textContent = product.name;
-            // Ensure the property name matches what's returned by the API
             document.getElementById('product-image').src = product.image_url || 'default-image.jpg'; // Fallback for missing image
             document.getElementById('product-description').textContent = product.description;
-            // Check if price is nested or needs parsing
             document.getElementById('product-price').textContent = `$${product.price}`;
+        }
+    
+        function displayProductVariants(variant) {
+            // Display product variant details
+            document.getElementById('variant-name').textContent = variant.name;
+            document.getElementById('variant-image').src = variant.image_url || 'default-variant-image.jpg'; // Fallback for missing variant image
+            document.getElementById('variant-description').textContent = variant.description;
+            document.getElementById('variant-price').textContent = `$${variant.price}`;
         }
     
         document.addEventListener('DOMContentLoaded', function() {
