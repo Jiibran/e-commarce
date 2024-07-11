@@ -404,7 +404,7 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('product_id');
 
-    if (file && email && productId && quantity) {
+    if (file && email && productId && quantity && /^image\//.test(file.type)) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('payload_json', JSON.stringify({
