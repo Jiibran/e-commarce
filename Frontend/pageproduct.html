@@ -232,19 +232,26 @@
         <div id="paymentModal">
           <h2>Complete Your Payment</h2>
           <input type="email" id="emailInput" placeholder="Your Email">
-
+          
           <!-- Existing Quantity Input -->
-          <input type="number" id="quantityInput" placeholder="Quantity" min="1">
-
+          <input type="number" id="quantityInput" placeholder="Quantity" min="1" oninput="updateTotalPrice()">
+          
           <!-- New Variant Input -->
           <input type="text" id="variantInput" placeholder="Product Variant">
-
+          
           <!-- Existing Additional Information Input -->
           <textarea id="additionalInfoInput" placeholder="Additional Information"></textarea>
-
+          
           <!-- Existing File Upload -->
           <input type="file" id="fileUpload" accept="image/png, image/jpeg, image/jpg">
           <button id="uploadBtn">Upload</button>
+          
+          <!-- Product Price (Assuming a static price for demonstration) -->
+          <div>Product Price: <span id="productPrice">100</span> Currency</div>
+          
+          <!-- Display Calculated Total Price -->
+          <div>Total Price: <span id="totalPrice">0</span> Currency</div>
+          
         </div>
       </div>
   </section>
@@ -372,7 +379,7 @@ fetch('http://174.138.27.151:5000/api/logout', {
     });
   });
   
-
+let harga
   document.addEventListener('DOMContentLoaded', function() {
     // Step 1: Extract the Product ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -388,6 +395,7 @@ fetch('http://174.138.27.151:5000/api/logout', {
             return response.json();
         })
         .then(product => {
+            harga = product.price
             // Step 3: Update HTML Content with Product Details
             document.querySelector('.card-img-top').src = product.image_url || 'https://dummyimage.com/600x700/dee2e6/6c757d.jpg';
             document.querySelector('.small.mb-1').textContent = `Stock: ${product.stock}`;
@@ -432,6 +440,11 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('product_id');
 
+    // Assuming product price is retrieved from an element with ID 'productPrice'
+    const productPriceElement = document.getElementById('productPrice');
+    const productPrice = parseFloat(productPriceElement.innerText || productPriceElement.value); // Ensure this matches how your price is stored
+    const harga = productPrice * quantity; // Calculate total price
+
     if (file && email && productId && quantity && /^image\//.test(file.type)) {
         const formData = new FormData();
         formData.append('file', file);
@@ -460,6 +473,13 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
         alert('Please fill in all required fields.');
     }
 });
+
+function updateTotalPrice() {
+    const productPrice = parseFloat(document.getElementById('productPrice').innerText);
+    const quantity = parseInt(document.getElementById('quantityInput').value, 10) || 0;
+    const totalPrice = productPrice * quantity;
+    document.getElementById('totalPrice').innerText = totalPrice.toFixed(2); // Update the total price display
+  }
 
   
   </script>
