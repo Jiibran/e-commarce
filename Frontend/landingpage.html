@@ -504,52 +504,65 @@ function generateProductCards(products) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  console.log(document.getElementById('searchField'));
-  console.log(document.getElementById('searchForm'));
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchFieldFromURL = urlParams.get('searchField');
+        var searchInput = document.getElementById('searchField');
 
-    const searchForm = document.getElementById('searchForm');
-    const searchField = document.getElementById('searchField');
-    const resultsContainer = document.getElementById('results');
-
-    if (searchFieldFromURL) {
-        searchField.value = searchFieldFromURL; // Set the search field value from URL
-        performSearch(searchFieldFromURL); // Perform search operation
-    }
-
-    searchForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent the default form submission behavior
-        performSearch(searchField.value);
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.keyCode === 13) { // 13 is the keycode for Enter
+                event.preventDefault(); // Prevent the default action to stop form submission
+                var searchQuery = encodeURIComponent(searchInput.value);
+                var searchURL = `http://174.138.27.151:8081/search.html?searchField=${searchQuery}`;
+                window.location.href = searchURL;
+            }
+        });
     });
 
-    function performSearch(searchQuery) {
-        fetch(`http://174.138.27.151:5000/api/search_products?searchField=${encodeURIComponent(searchQuery)}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('No products found');
-                }
-                return response.json();
-            })
-            .then(data => {
-                resultsContainer.innerHTML = ''; // Clear previous results
-                if (data.length > 0) {
-                    const list = document.createElement('ul');
-                    data.forEach(product => {
-                        const item = document.createElement('li');
-                        // Continue with your existing logic to display products
-                    });
-                    resultsContainer.appendChild(list);
-                } else {
-                    resultsContainer.textContent = 'No products found.';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                resultsContainer.textContent = error.toString();
-            });
-    }
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//   console.log(document.getElementById('searchField'));
+//   console.log(document.getElementById('searchForm'));
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const searchFieldFromURL = urlParams.get('searchField');
+
+//     const searchForm = document.getElementById('searchForm');
+//     const searchField = document.getElementById('searchField');
+//     const resultsContainer = document.getElementById('results');
+
+//     if (searchFieldFromURL) {
+//         searchField.value = searchFieldFromURL; // Set the search field value from URL
+//         performSearch(searchFieldFromURL); // Perform search operation
+//     }
+
+//     searchForm.addEventListener('submit', function(e) {
+//         e.preventDefault(); // Prevent the default form submission behavior
+//         performSearch(searchField.value);
+//     });
+
+//     function performSearch(searchQuery) {
+//         fetch(`http://174.138.27.151:5000/api/search_products?searchField=${encodeURIComponent(searchQuery)}`)
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('No products found');
+//                 }
+//                 return response.json();
+//             })
+//             .then(data => {
+//                 resultsContainer.innerHTML = ''; // Clear previous results
+//                 if (data.length > 0) {
+//                     const list = document.createElement('ul');
+//                     data.forEach(product => {
+//                         const item = document.createElement('li');
+//                         // Continue with your existing logic to display products
+//                     });
+//                     resultsContainer.appendChild(list);
+//                 } else {
+//                     resultsContainer.textContent = 'No products found.';
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error('Error:', error);
+//                 resultsContainer.textContent = error.toString();
+//             });
+//     }
+// });
   </script>
 </body>
 </html>
