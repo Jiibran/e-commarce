@@ -146,6 +146,30 @@
       .footer-menu.contact-item a:hover {
         color: #0056b3;
       }
+       /* This will cover the entire screen with a semi-transparent backdrop */
+  #paymentModalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    display: none; /* Hide by default */
+  }
+
+  /* Style for the modal to make it visually distinct */
+  #paymentModal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* Adjust based on your content */
+    width: 100%; /* For smaller screens */
+    box-sizing: border-box; /* Include padding and border in element's width */
+  }
     </style>
 </head>
 
@@ -216,10 +240,12 @@
               </div>
           </div>
       </div>
-      <div id="paymentModal" style="display:none;">
-        <h2>Complete Your Payment</h2>
-        <input type="file" id="fileUpload">
-        <button id="uploadBtn">Upload Screenshot</button>
+      <div id="paymentModalBackdrop">
+        <div id="paymentModal">
+          <h2>Complete Your Payment</h2>
+          <input type="file" id="fileUpload">
+          <button id="uploadBtn">Upload Screenshot</button>
+        </div>
       </div>
   </section>
     
@@ -347,7 +373,7 @@
 
 
 document.getElementById('buyNowBtn').addEventListener('click', function() {
-    document.getElementById('paymentModal').style.display = 'block';
+    document.getElementById('paymentModalBackdrop').style.display = 'flex'; // Show the modal and backdrop
 });
 
 document.getElementById('uploadBtn').addEventListener('click', function() {
