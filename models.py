@@ -1,4 +1,8 @@
 from flask_mysqldb import MySQL
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
 
 mysql = MySQL()
 
@@ -21,6 +25,20 @@ def token_exists(token):
     cur.close()
     return token_data is not None
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    roles = db.relationship('Role', backref='user', lazy=True)
+
+class Role(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    role_name = db.Column(db.String(80), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    details = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 def init_app(app):
     mysql.init_app(app)

@@ -1,8 +1,10 @@
-from flask import request, jsonify
+from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, decode_token
 from . import auth_bp
-from models import mysql, save_token, delete_token, token_exists
+from models import mysql, save_token, delete_token, token_exists, db, User, Role, Order
+
+app = Flask(__name__)
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -48,3 +50,22 @@ def profile():
     user = cur.fetchone()
     cur.close()
     return jsonify({'user_id': user[0], 'username': user[1], 'email': user[2]})
+
+@app.route('/all-orders', methods=['GET'])
+@jwt_required()
+def get_orders():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    
+    # Check if the user has a seller role
+    is_seller = any(role.role_name == 'seller' for role in user.roles)
+    
+    if is_seller:
+        # Fetch all orders for sellers
+        orders = Order.query.all()
+    else:
+        # Fetch only orders for the current user
+        orders = Order.query.filter_by(user_id=current_user_id).all()
+    
+    orders_data = [{'id': order.id, 'details': order.details} for order in orders]
+    return jsonify(orders_data)

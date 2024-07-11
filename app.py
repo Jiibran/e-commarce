@@ -4,17 +4,32 @@ from config import Config
 from models import init_app, mysql, token_exists, save_token, delete_token
 from routes import auth_bp, product_bp, cart_bp, order_bp, payment_bp, shipping_bp
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object(Config)
-CORS(app, resources={r"/api/*": {"origins": "http://174.138.27.151:8081"}})
- 
+CORS(app, resources={r"/*": {"origins": "http://174.138.27.151:8081"}}) 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdatabase.db'  # Or other database URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 jwt = JWTManager(app)
 init_app(app)
+
+def create_tables():
+    with app.app_context():
+        db.create_all(bind='roles') 
+        db.create_all()
+
+@app.cli.command("create-db")
+def create_db_command():
+    """Creates the database tables."""
+    create_tables()
+    print("Database tables created.")
 
 @app.route('/')
 def home():
     return 'E-commerce API is running'
+    
 
 # @jwt.token_in_blocklist_loader
 # def check_if_token_in_blocklist(jwt_header, jwt_payload):

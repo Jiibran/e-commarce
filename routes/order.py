@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import order_bp
 from models import mysql, save_token, delete_token, token_exists
+import sqlite3
 
 @order_bp.route('/orders', methods=['POST'])
 @jwt_required()
@@ -23,12 +24,30 @@ def create_order():
 @order_bp.route('/orders', methods=['GET'])
 @jwt_required()
 def get_orders():
-    user_id = get_jwt_identity()
+    user_email = get_jwt_identity()
+    print(user_email)
+    # Connect to the SQLite database to check user roles
+    sqlite_conn = sqlite3.connect('yourdatabase.db')  # Update the path to your SQLite DB
+    sqlite_cur = sqlite_conn.cursor()
+    sqlite_cur.execute("SELECT role FROM users WHERE email = ?", (user_email,))
+    is_admin = sqlite_cur.fetchone()
+    sqlite_cur.close()
+    sqlite_conn.close()
+    
+    # Connect to MySQL to fetch orders
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM orders WHERE user_id = %s", (user_id,))
+    if is_admin and is_admin[0] == 'admin':
+        # If the user is an admin, fetch all orders
+        cur.execute("SELECT * FROM orders")
+    else:
+        # If the user is not an admin, fetch orders only for that user
+        cur.execute("SELECT * FROM orders WHERE user_id = %s", (user_email,))
+    
     orders = cur.fetchall()
     cur.close()
-    return jsonify([{'order_id': o[0], 'total_price': o[2], 'status': o[3], 'created_at': o[4]} for o in orders])
+    
+    # Format and return the orders
+    return jsonify([{'order_id': o[0], 'user_email': o[1], 'total_price': o[2], 'status': o[3], 'created_at': o[4]} for o in orders])
 
 @order_bp.route('/orders/<int:order_id>', methods=['GET'])
 @jwt_required()
