@@ -202,8 +202,9 @@
               <i class="fa-solid fa-cart-plus" style="color: white;"></i>
             </a>
             <div class="col-md-2 text-end">
-              <a href="login.html" class="btn btn-outline-warning me-2">Login</a>
-              <a href="register.html" class="btn btn-dark">Sign-up</a>
+              <a href="login.html" id="loginButton" class="btn btn-outline-warning me-2">Login</a>
+              <a href="register.html" id="registerButton" class="btn btn-dark">Sign-up</a>
+              <a id="logoutButton" class="btn btn-dark">Logout</a>
             </div>
           </div>
         </div>
@@ -342,6 +343,52 @@
               });
           });
       });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Token exists, user is presumably logged in
+      document.getElementById('loginButton').style.display = 'none';
+      document.getElementById('registerButton').style.display = 'none';
+      document.getElementById('logoutButton').style.display = 'block';
+    } else {
+      // No token found, user is not logged in
+      document.getElementById('loginButton').style.display = 'block';
+      document.getElementById('registerButton').style.display = 'block';
+      document.getElementById('logoutButton').style.display = 'none';
+    }
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    // Select the logout button by its ID
+    const logoutButton = document.getElementById('logoutButton');
+
+    // Add click event listener to the logout button
+    logoutButton.addEventListener('click', function() {
+      // Remove the access token from local storage
+      const token = localStorage.getItem('token');
+
+// Call the logout API with the token
+fetch('https://example.com/api/logout', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  body: JSON.stringify({ token: token })
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Logout successful', data);
+  // Remove the access token from local storage
+  localStorage.removeItem('token');
+
+  // Optionally, redirect the user to the login page or refresh the page
+  // window.location.href = 'login.html'; // Redirect to login page
+  window.location.reload(); // Or simply reload the current page
+})
+
+    });
   });
   
 
