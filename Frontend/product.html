@@ -58,20 +58,31 @@
         }
     
         function displayProductVariants(variants) {
-    // Check if variants is an array and has at least one item
-    if (Array.isArray(variants) && variants.length > 0) {
-        // Example: Display the first variant's details
-        // You can adjust this to display all variants as needed
-        const firstVariant = variants[0];
-        document.getElementById('variant-name').textContent = firstVariant.variant_name || 'Default Name';
-        document.getElementById('variant-image').src = firstVariant.image_url || 'default-variant-image.jpg';
-        document.getElementById('variant-description').textContent = firstVariant.description || 'Default Description';
-        document.getElementById('variant-price').textContent = `$${firstVariant.price || '0.00'}`;
-    } else {
+    if (!Array.isArray(variants) || variants.length === 0) {
         console.error('No variants data available');
         // Handle the case where no variants are available
-        // For example, hide the variants section or display a default message
+        return;
     }
+
+    // Example: Clear existing variants display
+    const variantsContainer = document.getElementById('variants-container');
+    variantsContainer.innerHTML = '';
+
+    // Iterate over each variant and create display elements for each
+    variants.forEach(variant => {
+        const variantElement = document.createElement('div');
+        variantElement.className = 'variant';
+
+        // Assuming the variant object structure based on the provided context
+        variantElement.innerHTML = `
+            <h3>${variant.variant_name}</h3>
+            <p>Price: $${variant.price}</p>
+            <p>Stock: ${variant.stock}</p>
+        `;
+
+        // Append the variant element to the container
+        variantsContainer.appendChild(variantElement);
+    });
 }
     
         document.addEventListener('DOMContentLoaded', function() {
