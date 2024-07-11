@@ -25,35 +25,48 @@
 
     <script>
         // Async function to fetch product details
-async function fetchProductDetails(productId) {
+        async function fetchProductDetails(productId) {
     try {
         const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}`);
         if (!response.ok) throw new Error('Failed to fetch product details');
         const product = await response.json();
-        document.getElementById('productDetails').innerHTML = `
-            <h2>${product.name}</h2>
-            <p>${product.description}</p>
-            <p>Price: ${product.price}</p>
-        `;
+        const productDetailsElement = document.getElementById('productDetails');
+        if (productDetailsElement) {
+            productDetailsElement.innerHTML = `
+                <h2>${product.name}</h2>
+                <p>${product.description}</p>
+                <p>Price: ${product.price}</p>
+            `;
+        } else {
+            console.error('Element #productDetails not found');
+        }
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-// Async function to fetch product variants
+// Adjusted fetchProductVariants to ensure variants is an array
 async function fetchProductVariants(productId) {
     try {
-        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}`);
+        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}/variants`);
         if (!response.ok) throw new Error('Failed to fetch product variants');
         const variants = await response.json();
-        const variantsContainer = document.getElementById('productVariants');
-        variantsContainer.innerHTML = variants.map(variant => `
-            <div>
-                <h3>${variant.name}</h3>
-                <p>Price: ${variant.price}</p>
-                <p>Stock: ${variant.stock}</p>
-            </div>
-        `).join('');
+        if (Array.isArray(variants)) {
+            const variantsContainer = document.getElementById('productVariants');
+            if (variantsContainer) {
+                variantsContainer.innerHTML = variants.map(variant => `
+                    <div>
+                        <h3>${variant.name}</h3>
+                        <p>Price: ${variant.price}</p>
+                        <p>Stock: ${variant.stock}</p>
+                    </div>
+                `).join('');
+            } else {
+                console.error('Element #productVariants not found');
+            }
+        } else {
+            console.error('Expected variants to be an array');
+        }
     } catch (error) {
         console.error('Error:', error);
     }
