@@ -301,6 +301,40 @@
       });
   });
   
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Step 1: Extract the Product ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('productId'); // Assuming the URL parameter is named 'productId'
+
+    if (productId) {
+        // Step 2: Fetch Product Data
+        fetch(`http://174.138.27.151:5000/api/products/${productId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(product => {
+            // Step 3: Update HTML Content with Product Details
+            document.querySelector('.card-img-top').src = product.imageUrl || 'https://dummyimage.com/600x700/dee2e6/6c757d.jpg';
+            document.querySelector('.small.mb-1').textContent = `SKU: ${product.sku}`;
+            document.querySelector('h1.display-5.fw-bolder').textContent = product.name;
+            document.querySelector('.fs-5.mb-5 .text-decoration-line-through').textContent = `$${product.originalPrice}`;
+            document.querySelector('.fs-5.mb-5 span:not(.text-decoration-line-through)').textContent = `$${product.price}`;
+            document.querySelector('.lead').textContent = product.description;
+            // Update the star ratings if applicable
+            // Update any other elements as needed
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+    } else {
+        console.log('Product ID not found in URL');
+    }
+});
+
   
   </script>
 
