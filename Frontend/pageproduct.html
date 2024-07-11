@@ -174,41 +174,28 @@
 </head>
 
 <body>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light mb-4" style="background-color: #a44e24;">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="landingpage.html"><img src="vendorkita.png" alt="Logo"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-              <div id="the-basics">
-                <div class="input-group">
-                  <button class="btn btn-light dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Kategori
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                    <li><a class="dropdown-item" href="#">Barang</a></li>
-                    <li><a class="dropdown-item" href="#">Jasa</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Lihat Semua Kategori</a></li>
-                  </ul>
-                  <input name="searchField" id="searchField" type="search" class="form-control form-control-dark" style="width: 600px;" placeholder="Cari Vendor">
-                  <span class="input-group-text"><i class="fa fa-search"></i></span>
-                </div>
-              </div>
-            </form>
-            <a class="col-1-md-2" href="transaction.html">
-              <i class="fa-solid fa-cart-plus" style="color: white;"></i>
-            </a>
-            <div class="col-md-2 text-end">
-              <a href="login.html" id="loginButton" class="btn btn-outline-warning me-2">Login</a>
-              <a href="register.html" id="registerButton" class="btn btn-dark">Sign-up</a>
-              <a id="logoutButton" class="btn btn-dark">Logout</a>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light mb-4" style="background-color: #a44e24;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="landingpage.html"><img src="vendorkita.png" alt="Logo"></a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+          <div id="the-basics">
+            <div class="input-group">
+              <input name="searchField" id="searchField" type="search" class="form-control form-control-dark" style="width: 700px;" placeholder="Cari Vendor">
             </div>
           </div>
-        </div>
-      </nav>
+        </form>
+      </div>
+      <!-- <a class="col-2" href="#">
+        <i class="fa-solid fa-cart-plus" style="color: white;"></i>
+      </a> -->
+      <div class="col-md-2 text-end">
+        <a href="login.html" id="loginButton" class="btn btn-outline-warning me-2">Login</a>
+        <a href="register.html" id="registerButton" class="btn btn-dark">Sign-up</a>
+        <a id="logoutButton" class="btn btn-dark">Logout</a>
+      </div>
+    </div>
+  </nav>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
@@ -262,42 +249,22 @@
       </div>
   </section>
     
-    <footer class="py-5" style="background-color: #a44e24;">
+  <footer class="py-5" style="background-color: #a44e24;">
     <div class="container">
       <div class="row">
+        <!-- About Us on the left -->
         <div class="col-md-4 mb-3">
           <div class="footer-menu">
             <h4 class="widget-title">About Us</h4>
             <ul class="menu-list">
-              <li class="menu-item"><a href="#">Who We Are</a></li>
               <li class="menu-item"><a href="#">Our Team</a></li>
-              <li class="menu-item"><a href="#">Careers</a></li>
               <li class="menu-item"><a href="#">Contact Us</a></li>
             </ul>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
-          <div class="footer-menu">
-            <h4 class="widget-title">Customer Service</h4>
-            <ul class="menu-list">
-              <li class="menu-item"><a href="#">Help & FAQs</a></li>
-              <li class="menu-item"><a href="#">Shipping & Returns</a></li>
-              <li class="menu-item"><a href="#">Privacy Policy</a></li>
-              <li class="menu-item"><a href="#">Terms & Conditions</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="footer-menu contact-item">
-            <h4 class="widget-title">Contact Us</h4>
-            <p>123 Street, Jakarta, Indonesia</p>
-            <p>Email: info@example.com</p>
-            <p>Phone: +68 2123 1231 3443</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 text-center">
+
+        <!-- Social Links and Copyright in the middle -->
+        <div class="col-md-4 mb-5 text-center">
           <div class="social-links">
             <ul class="list-unstyled d-flex justify-content-center">
               <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
@@ -306,11 +273,19 @@
               <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
             </ul>
           </div>
-          <p class="text-white">© 2024 Your Company. All rights reserved.</p>
+          <p class="text-white">© 2024 VendorKITA. All rights reserved.</p>
+        </div>
+
+        <!-- Find Us on the right -->
+        <div class="col-md-4 mb-3 text-right">
+          <div class="footer-menu contact-item">
+            <h4 class="widget-title">Find Us</h4>
+            <p>Jl. HS.Ronggo Waluyo, Puseurjaya, Telukjambe Timur, Karawang, Jawa Barat 41361</p>
+          </div>
         </div>
       </div>
     </div>
-  </footer>
+</footer>
 
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
