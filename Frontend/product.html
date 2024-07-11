@@ -24,80 +24,57 @@
     </div>
 
     <script>
-        function fetchProductDetails(productId) {
-            fetch(`http://174.138.27.151:5000/api/products/${productId}`, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Debug: Log the data to see its structure
-                displayProductDetails(data);
-                fetchProductVariants(productId); // Fetch variants after displaying product details
-            })
-            .catch(error => console.error('Error fetching product details:', error));
-        }
-    
-        function fetchProductVariants(productId) {
-            fetch(`http://174.138.27.151:5000/api/product_variants?product_id=${productId}`, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(variants => {
-                console.log(variants); // Debug: Log the variants to see its structure
-                displayProductVariants(variants[0]); // Assuming the first variant is to be displayed, adjust as needed
-            })
-            .catch(error => console.error('Error fetching product variants:', error));
-        }
-    
-        function displayProductDetails(product) {
-            console.log(product); // Debug: Ensure this logs the expected product object
-            document.getElementById('product-name').textContent = product.name;
-            document.getElementById('product-image').src = product.image_url || 'default-image.jpg'; // Fallback for missing image
-            document.getElementById('product-description').textContent = product.description;
-            document.getElementById('product-price').textContent = `$${product.price}`;
-        }
-    
-        function displayProductVariants(variants) {
-    if (!Array.isArray(variants) || variants.length === 0) {
-        console.error('No variants data available');
-        // Handle the case where no variants are available
-        return;
-    }
-
-    // Example: Clear existing variants display
-    const variantsContainer = document.getElementById('variants-container');
-    variantsContainer.innerHTML = '';
-
-    // Iterate over each variant and create display elements for each
-    variants.forEach(variant => {
-        const variantElement = document.createElement('div');
-        variantElement.className = 'variant';
-
-        // Assuming the variant object structure based on the provided context
-        variantElement.innerHTML = `
-            <h3>${variant.variant_name}</h3>
-            <p>Price: $${variant.price}</p>
-            <p>Stock: ${variant.stock}</p>
+        // Async function to fetch product details
+async function fetchProductDetails(productId) {
+    try {
+        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}`);
+        if (!response.ok) throw new Error('Failed to fetch product details');
+        const product = await response.json();
+        document.getElementById('productDetails').innerHTML = `
+            <h2>${product.name}</h2>
+            <p>${product.description}</p>
+            <p>Price: ${product.price}</p>
         `;
-
-        // Append the variant element to the container
-        variantsContainer.appendChild(variantElement);
-    });
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            const productId = getProductIdFromUrl();
-            if (productId) {
-                fetchProductDetails(productId);
-            } else {
-                console.error('Product ID is missing in the URL');
-            }
-        });
-    
-        function getProductIdFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('product_id');
-        }
+
+// Async function to fetch product variants
+async function fetchProductVariants(productId) {
+    try {
+        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}`);
+        if (!response.ok) throw new Error('Failed to fetch product variants');
+        const variants = await response.json();
+        const variantsContainer = document.getElementById('productVariants');
+        variantsContainer.innerHTML = variants.map(variant => `
+            <div>
+                <h3>${variant.name}</h3>
+                <p>Price: ${variant.price}</p>
+                <p>Stock: ${variant.stock}</p>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Function to extract product ID from URL
+function getProductIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('productId');
+}
+
+// Main function to run on document load
+document.addEventListener('DOMContentLoaded', async () => {
+    const productId = getProductIdFromUrl();
+    if (productId) {
+        await fetchProductDetails(productId);
+        await fetchProductVariants(productId);
+    } else {
+        console.error('Product ID not found in URL');
+    }
+});
     </script>
 </body>
 </html>
