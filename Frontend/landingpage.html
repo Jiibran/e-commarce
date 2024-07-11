@@ -504,14 +504,26 @@ function generateProductCards(products) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log(document.getElementById('searchForm'));
-    document.getElementById('searchForm').addEventListener('submit', function(e) {
+  console.log(document.getElementById('searchForm'));
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchFieldFromURL = urlParams.get('searchField');
+
+    const searchForm = document.getElementById('searchForm');
+    const searchField = document.getElementById('searchField');
+    const resultsContainer = document.getElementById('results');
+
+    if (searchFieldFromURL) {
+        searchField.value = searchFieldFromURL; // Set the search field value from URL
+        performSearch(searchFieldFromURL); // Perform search operation
+    }
+
+    searchForm.addEventListener('submit', function(e) {
         e.preventDefault(); // Prevent the default form submission behavior
+        performSearch(searchField.value);
+    });
 
-        const searchField = document.getElementById('searchField').value;
-        const resultsContainer = document.getElementById('results');
-
-        fetch(`http://174.138.27.151:5000/api/search_products?searchField=${encodeURIComponent(searchField)}`)
+    function performSearch(searchQuery) {
+        fetch(`http://174.138.27.151:5000/api/search_products?searchField=${encodeURIComponent(searchQuery)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('No products found');
@@ -524,12 +536,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     const list = document.createElement('ul');
                     data.forEach(product => {
                         const item = document.createElement('li');
-                        item.textContent = `${product.name} - $${product.price}`;
-                        list.appendChild(item);
+                        // Continue with your existing logic to display products
                     });
                     resultsContainer.appendChild(list);
                 } else {
-                    // Make sure to handle the case where no products are found
                     resultsContainer.textContent = 'No products found.';
                 }
             })
@@ -537,9 +547,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error:', error);
                 resultsContainer.textContent = error.toString();
             });
-    });
+    }
 });
-
   </script>
 </body>
 </html>
