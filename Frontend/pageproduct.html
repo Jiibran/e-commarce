@@ -319,7 +319,7 @@
         .then(product => {
             // Step 3: Update HTML Content with Product Details
             document.querySelector('.card-img-top').src = product.image_url || 'https://dummyimage.com/600x700/dee2e6/6c757d.jpg';
-            document.querySelector('.small.mb-1').textContent = `Stok: ${product.stock}`;
+            document.querySelector('.small.mb-1').textContent = `Stock: ${product.stock}`;
             document.querySelector('h1.display-5.fw-bolder').textContent = product.name;
             // document.querySelector('.fs-5.mb-5 .text-decoration-line-through').textContent = `$${product.originalPrice}`;
             document.querySelector('.fs-5.mb-5 span:not(.text-decoration-line-through)').textContent = `$${product.price}`;
