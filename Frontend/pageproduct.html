@@ -208,13 +208,18 @@
                   <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?</p>
                   <div class="d-flex">
                       <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" min="1" style="max-width: 3rem" />
-                      <button class="btn btn-outline-dark flex-shrink-0" type="button" id="addToCartButton">
+                      <button class="btn btn-outline-dark flex-shrink-0" type="button" id="buyNowBtn">
                           <i class="bi-cart-fill me-1"></i>
                           Buy Now
                       </button>
                   </div>
               </div>
           </div>
+      </div>
+      <div id="paymentModal" style="display:none;">
+        <h2>Complete Your Payment</h2>
+        <input type="file" id="fileUpload">
+        <button id="uploadBtn">Upload Screenshot</button>
       </div>
   </section>
     
@@ -337,6 +342,43 @@
         document.body.innerHTML = '<h1>Product not found. Please specify a valid product ID in the URL.</h1>';
         // Optionally, redirect to a default page after a delay
         // setTimeout(() => window.location.href = '/defaultPage.html', 5000);
+    }
+});
+
+
+document.getElementById('buyNowBtn').addEventListener('click', function() {
+    document.getElementById('paymentModal').style.display = 'block';
+});
+
+document.getElementById('uploadBtn').addEventListener('click', function() {
+    const fileInput = document.getElementById('fileUpload');
+    const file = fileInput.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Replace 'YOUR_DISCORD_WEBHOOK_URL' with your actual Discord webhook URL
+        fetch('https://discord.com/api/webhooks/1260933895185240115/1RmXxIo5Uq0c2pVpmTT6lVgZKJCSHONCqUMPVamnl2e-bXX4fW0qQC2PYh-bXUjP9b3k', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Screenshot uploaded successfully!');
+                document.getElementById('paymentModal').style.display = 'none';
+            } else {
+                alert('Failed to upload screenshot.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error uploading screenshot.');
+        });
+    } else {
+        alert('Please select a file to upload.');
     }
 });
 
