@@ -402,7 +402,7 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
 
     // Extract 'productId' from the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('productId');
+    const productId = urlParams.get('product_id');
 
     if (file && email && productId && quantity) {
         const formData = new FormData();
