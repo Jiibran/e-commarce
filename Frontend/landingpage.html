@@ -503,37 +503,40 @@ function generateProductCards(products) {
 }
 });
 
-document.getElementById('searchForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent the default form submission behavior
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission behavior
 
-    const searchField = document.getElementById('searchField').value;
-    const resultsContainer = document.getElementById('results');
+        const searchField = document.getElementById('searchField').value;
+        const resultsContainer = document.getElementById('results');
 
-    fetch(`http://174.138.27.151:5000/api/search_products?searchField=${encodeURIComponent(searchField)}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('No products found');
-            }
-            return response.json();
-        })
-        .then(data => {
-    resultsContainer.innerHTML = ''; // Clear previous results
-    if (data.length > 0) {
-        const list = document.createElement('ul');
-        data.forEach(product => {
-            const item = document.createElement('li');
-            item.textContent = `${product.name} - $${product.price}`;
-            list.appendChild(item);
-        });
-        resultsContainer.appendChild(list);
-    } else {
-        resultsContainer.textContent = 'No products found.';
-    }
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-    resultsContainer.textContent = 'Failed to fetch products. Please check the console for more details.';
-});
+        fetch(`http://174.138.27.151:5000/api/search_products?searchField=${encodeURIComponent(searchField)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No products found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                resultsContainer.innerHTML = ''; // Clear previous results
+                if (data.length > 0) {
+                    const list = document.createElement('ul');
+                    data.forEach(product => {
+                        const item = document.createElement('li');
+                        item.textContent = `${product.name} - $${product.price}`;
+                        list.appendChild(item);
+                    });
+                    resultsContainer.appendChild(list);
+                } else {
+                    // Make sure to handle the case where no products are found
+                    resultsContainer.textContent = 'No products found.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultsContainer.textContent = error.toString();
+            });
+    });
 });
 
   </script>
