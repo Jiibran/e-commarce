@@ -477,7 +477,7 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
 function updateTotalPrice() {
     const productPrice = parseFloat(document.getElementById('productPrice').innerText);
     const quantity = parseInt(document.getElementById('quantityInput').value, 10) || 0;
-    const totalPrice = productPrice * quantity;
+    const totalPrice = harga * quantity;
     document.getElementById('totalPrice').innerText = totalPrice.toFixed(2); // Update the total price display
   }
 
