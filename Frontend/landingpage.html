@@ -504,31 +504,38 @@ function generateProductCards(products) {
 });
 
 document.getElementById('searchForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault(); // Prevent the default form submission behavior
+
     const searchField = document.getElementById('searchField').value;
-    fetch(`http://174.138.27.151:5000/api/products?searchField=${encodeURIComponent(searchField)}`)
-        .then(response => response.json())
-        .then(data => {
-            displayResults(data);
+    const resultsContainer = document.getElementById('results');
+
+    fetch(`http://174.138.27.151:5000/api/search_products?searchField=${encodeURIComponent(searchField)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No products found');
+            }
+            return response.json();
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .then(data => {
+            resultsContainer.innerHTML = ''; // Clear previous results
+            if (data.length > 0) {
+                const list = document.createElement('ul');
+                data.forEach(product => {
+                    const item = document.createElement('li');
+                    item.textContent = `${product.name} - $${product.price}`;
+                    list.appendChild(item);
+                });
+                resultsContainer.appendChild(list);
+            } else {
+                resultsContainer.textContent = 'No products found.';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            resultsContainer.textContent = error.toString();
+        });
 });
 
-function displayResults(products) {
-    const resultsContainer = document.getElementById('searchResults');
-    resultsContainer.innerHTML = ''; // Clear previous results
-    if (products.length > 0) {
-        const list = document.createElement('ul');
-        products.forEach(product => {
-            const item = document.createElement('li');
-            item.textContent = `${product.name} - $${product.price}`;
-            list.appendChild(item);
-        });
-        resultsContainer.appendChild(list);
-    } else {
-        resultsContainer.textContent = 'No products found.';
-    }
-}
   </script>
 </body>
 </html>

@@ -7,7 +7,6 @@ from decimal import Decimal
 @product_bp.route('/products', methods=['GET'])
 def get_products():
     category_id = request.args.get('category_id', None)
-    search_field = request.args.get('searchField', None)
     cur = mysql.connection.cursor()
 
     if category_id:
@@ -16,12 +15,6 @@ def get_products():
             JOIN product_categories pc ON p.id = pc.product_id
             WHERE pc.category_id = %s
         """, (category_id,))
-    elif search_field:
-        search_query = f"%{search_field}%"
-        cur.execute("""
-            SELECT * FROM products
-            WHERE name LIKE %s
-        """, (search_query,))
     else:
         cur.execute("SELECT * FROM products")
 
@@ -35,8 +28,8 @@ def get_products():
             'name': p[1], 
             'description': p[2], 
             'price': float(p[3]) if isinstance(p[3], Decimal) else p[3], 
-            'stock': p[4],
-            # Ensure all necessary fields are included here
+            'stock': p[4], 
+            'image_url': p[5]
         } for p in products
     ]
 
@@ -62,6 +55,33 @@ def get_product(product_id):
     else:
         return jsonify({'message': 'Product not found'}), 404
 
+@product_bp.route('/search_products', methods=['GET'])
+def search_products():
+    search_field = request.args.get('searchField', '')
+    cur = mysql.connection.cursor()
+    
+    # Using LIKE for partial matching, ensure '%' wildcards are used
+    search_query = f"%{search_field}%"
+    cur.execute("SELECT * FROM products WHERE name LIKE %s", (search_query,))
+    
+    products = cur.fetchall()
+    cur.close()
+
+    if products:
+        products_list = [
+            {
+                'product_id': product[0], 
+                'name': product[1], 
+                'description': product[2], 
+                'price': float(product[3]) if isinstance(product[3], Decimal) else product[3], 
+                'stock': product[4], 
+                'image_url': product[5]
+            } for product in products
+        ]
+        return jsonify(products_list)
+    else:
+        return jsonify({'message': 'No products found matching the search criteria'}), 404
+    
 @product_bp.route('/products', methods=['POST'])
 @jwt_required()
 def add_product():
