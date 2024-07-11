@@ -247,10 +247,10 @@
           <button id="uploadBtn">Upload</button>
           
           <!-- Product Price (Assuming a static price for demonstration) -->
-          <div>Product Price: <span id="productPrice">100</span> Currency</div>
+          <div>Product Price: Rp. <span id="productPrice">100</span> </div>
           
           <!-- Display Calculated Total Price -->
-          <div>Total Price: <span id="totalPrice">0</span> Currency</div>
+          <div>Total Price: Rp. <span id="totalPrice">0</span> </div>
           
         </div>
       </div>
@@ -477,7 +477,9 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
 function updateTotalPrice() {
     const productPrice = parseFloat(document.getElementById('productPrice').innerText);
     const quantity = parseInt(document.getElementById('quantityInput').value, 10) || 0;
+    
     const totalPrice = harga * quantity;
+    document.getElementById('productPrice').innerText = harga.toFixed(2); // Update the product price display
     document.getElementById('totalPrice').innerText = totalPrice.toFixed(2); // Update the total price display
   }
 
