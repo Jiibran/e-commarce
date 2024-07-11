@@ -517,23 +517,23 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
             return response.json();
         })
         .then(data => {
-            resultsContainer.innerHTML = ''; // Clear previous results
-            if (data.length > 0) {
-                const list = document.createElement('ul');
-                data.forEach(product => {
-                    const item = document.createElement('li');
-                    item.textContent = `${product.name} - $${product.price}`;
-                    list.appendChild(item);
-                });
-                resultsContainer.appendChild(list);
-            } else {
-                resultsContainer.textContent = 'No products found.';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            resultsContainer.textContent = error.toString();
+    resultsContainer.innerHTML = ''; // Clear previous results
+    if (data.length > 0) {
+        const list = document.createElement('ul');
+        data.forEach(product => {
+            const item = document.createElement('li');
+            item.textContent = `${product.name} - $${product.price}`;
+            list.appendChild(item);
         });
+        resultsContainer.appendChild(list);
+    } else {
+        resultsContainer.textContent = 'No products found.';
+    }
+})
+.catch(error => {
+    console.error('Fetch error:', error);
+    resultsContainer.textContent = 'Failed to fetch products. Please check the console for more details.';
+});
 });
 
   </script>
