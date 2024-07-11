@@ -10,6 +10,41 @@
         <!-- Orders will be displayed here -->
     </div>
 
-    <script src="path/to/your/javascript/file.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    fetchOrders();
+});
+
+function fetchOrders() {
+    fetch('/api/orders')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const ordersContainer = document.getElementById('ordersContainer');
+            data.forEach(order => {
+                const orderDiv = document.createElement('div');
+                orderDiv.className = 'order'; // Add a class for styling if needed
+                // Assuming the order object has id, name, and other properties you want to display
+                orderDiv.innerHTML = `
+                    <h3>Order ID: ${order.id}</h3>
+                    <p>Order Name: ${order.name}</p>
+                    <p>Quantity: ${order.quantity}</p> <!-- Example additional detail -->
+                    <p>Status: ${order.status}</p> <!-- Example additional detail -->
+                `;
+                ordersContainer.appendChild(orderDiv);
+            });
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+            // Optionally, display this error on the page
+            const ordersContainer = document.getElementById('ordersContainer');
+            ordersContainer.innerHTML = '<p>Failed to load orders. Please try again later.</p>';
+        });
+}
+    </script>
 </body>
 </html>
