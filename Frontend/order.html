@@ -16,13 +16,13 @@
 });
 
 function fetchOrders() {
-    fetch('http://174.138.27.151:5000/api/orders')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+    const token = localStorage.getItem('token'); // Get the token from local storage
+
+    fetch('http://174.138.27.151:5000/api/orders', {
+    headers: {
+        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+    }
+})
         .then(data => {
             const ordersContainer = document.getElementById('ordersContainer');
             data.forEach(order => {
