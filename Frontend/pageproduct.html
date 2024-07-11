@@ -331,7 +331,12 @@
             console.error('There was a problem with your fetch operation:', error);
         });
     } else {
+        // Product ID not found in URL
         console.log('Product ID not found in URL');
+        // Display a user-friendly message or redirect
+        document.body.innerHTML = '<h1>Product not found. Please specify a valid product ID in the URL.</h1>';
+        // Optionally, redirect to a default page after a delay
+        // setTimeout(() => window.location.href = '/defaultPage.html', 5000);
     }
 });
 
