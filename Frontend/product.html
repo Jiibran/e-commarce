@@ -12,7 +12,8 @@
         <img id="product-image" src="" alt="Product Image" />
         <p id="product-description">Product Description</p>
         <p id="product-price">Product Price</p>
-        <!-- Add more product details as needed -->
+        <!-- Product Variants Container -->
+        <div id="product-variants"></div>
     </div>
 
     <script>
@@ -28,16 +29,42 @@
             .then(response => response.json())
             .then(data => {
                 displayProductDetails(data);
+                fetchProductVariants(productId); // Fetch variants after product details
             })
             .catch(error => console.error('Error fetching product details:', error));
         }
+
+        async function fetchProductVariants(productId) {
+    try {
+        const response = await fetch(`http://174.138.27.151:5000/api/product_variants?product_id=${productId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const variants = await response.json();
+        displayProductVariants(variants);
+    } catch (error) {
+        console.error('Error fetching product variants:', error);
+    }
+}
 
         function displayProductDetails(product) {
             document.getElementById('product-name').textContent = product.name;
             document.getElementById('product-image').src = product.image_url;
             document.getElementById('product-description').textContent = product.description;
             document.getElementById('product-price').textContent = `$${product.price}`;
-            // Add more fields as necessary
+        }
+
+        function displayProductVariants(variants) {
+            const variantsContainer = document.getElementById('product-variants');
+            variants.forEach(variant => {
+                const variantElement = document.createElement('div');
+                variantElement.innerHTML = `
+                    <h4>${variant.name}</h4>
+                    <p>Price: $${variant.price}</p>
+                    <p>Stock: ${variant.stock}</p>
+                `;
+                variantsContainer.appendChild(variantElement);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
