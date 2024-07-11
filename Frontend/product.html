@@ -12,82 +12,42 @@
         <img id="product-image" src="" alt="Product Image" />
         <p id="product-description">Product Description</p>
         <p id="product-price">Product Price</p>
-        <!-- Product Variant Section -->
-        <div id="product-variant">
-            <h2>Product Variant</h2>
-            <p id="variant-name">Variant Name</p>
-            <img id="variant-image" src="" alt="Variant Image" />
-            <p id="variant-description">Variant Description</p>
-            <p id="variant-price">Variant Price</p>
-        </div>
         <!-- Add more product details as needed -->
     </div>
 
     <script>
-        // Async function to fetch product details
-        async function fetchProductDetails(productId) {
-    try {
-        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}`);
-        if (!response.ok) throw new Error('Failed to fetch product details');
-        const product = await response.json();
-        const productDetailsElement = document.getElementById('productDetails');
-        if (productDetailsElement) {
-            productDetailsElement.innerHTML = `
-                <h2>${product.name}</h2>
-                <p>${product.description}</p>
-                <p>Price: ${product.price}</p>
-            `;
-        } else {
-            console.error('Element #productDetails not found');
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('product_id');
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
 
-// Adjusted fetchProductVariants to ensure variants is an array
-async function fetchProductVariants(productId) {
-    try {
-        const response = await fetch(`http://174.138.27.151:5000/api/products/${productId}`);
-        if (!response.ok) throw new Error('Failed to fetch product variants');
-        const variants = await response.json();
-        if (Array.isArray(variants)) {
-            const variantsContainer = document.getElementById('productVariants');
-            if (variantsContainer) {
-                variantsContainer.innerHTML = variants.map(variant => `
-                    <div>
-                        <h3>${variant.name}</h3>
-                        <p>Price: ${variant.price}</p>
-                        <p>Stock: ${variant.stock}</p>
-                    </div>
-                `).join('');
+        function fetchProductDetails(productId) {
+            fetch(`http://174.138.27.151:5000/api/products/${productId}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayProductDetails(data);
+            })
+            .catch(error => console.error('Error fetching product details:', error));
+        }
+
+        function displayProductDetails(product) {
+            document.getElementById('product-name').textContent = product.name;
+            document.getElementById('product-image').src = product.image_url;
+            document.getElementById('product-description').textContent = product.description;
+            document.getElementById('product-price').textContent = `$${product.price}`;
+            // Add more fields as necessary
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const productId = getProductIdFromUrl();
+            if (productId) {
+                fetchProductDetails(productId);
             } else {
-                console.error('Element #productVariants not found');
+                console.error('Product ID is missing in the URL');
             }
-        } else {
-            console.error('Expected variants to be an array');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-// Function to extract product ID from URL
-function getProductIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    // Change 'productId' to 'product_id' to match the URL query parameter
-    return urlParams.get('product_id');
-}
-// Main function to run on document load
-document.addEventListener('DOMContentLoaded', async () => {
-    const productId = getProductIdFromUrl();
-    if (productId) {
-        await fetchProductDetails(productId);
-        await fetchProductVariants(productId);
-    } else {
-        console.error('Product ID not found in URL');
-    }
-});
+        });
     </script>
 </body>
 </html>
