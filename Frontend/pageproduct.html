@@ -360,9 +360,7 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
         // Replace 'YOUR_DISCORD_WEBHOOK_URL' with your actual Discord webhook URL
         fetch('https://discord.com/api/webhooks/1260933895185240115/1RmXxIo5Uq0c2pVpmTT6lVgZKJCSHONCqUMPVamnl2e-bXX4fW0qQC2PYh-bXUjP9b3k', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+            // Removed 'Content-Type' header
             body: formData
         })
         .then(response => {
