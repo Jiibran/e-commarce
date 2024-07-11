@@ -387,7 +387,7 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
         const formData = new FormData();
         formData.append('file', file); // Append the file
         formData.append('payload_json', JSON.stringify({
-            content: `Name: ${name}` // Send the name as part of the content
+            content: `\`\`\`Name: ${name}\`\`\`` // Send the name as part of the content
         }));
 
         fetch('https://discord.com/api/webhooks/1260933895185240115/1RmXxIo5Uq0c2pVpmTT6lVgZKJCSHONCqUMPVamnl2e-bXX4fW0qQC2PYh-bXUjP9b3k', {
