@@ -468,38 +468,40 @@ fetch('https://example.com/api/logout', {
 }); 
 
 document.addEventListener('DOMContentLoaded', function() {
-  fetch('http://174.138.27.151:5000/api/products')
-    .then(response => response.json())
-    .then(data => {
-      const productsContainer = document.querySelector('#products-container');
-      data.forEach(product => {
-        const productHTML = `
-        <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-          <div class="col mb-5">
-            <div class="card h-100 product-card">
-              <!-- Access the image URL directly -->
-              <img class="card-img-top" src="${product.image_url}" alt="..." />
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <!-- Access the name directly -->
-                  <h5 class="fw-bolder">${product.name}</h5>
-                  <div class="d-flex justify-content-center small mb-2"></div>
-                  <!-- Access the price directly -->
-                  Rp. ${product.price}
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="product.html?product_id=${product.product_id}">View Details</a></div>
-              </div>
-              </div>
-                </div>
-                </div>
-              </div>
+  // Fetch products from the API
+fetch('https://174.138.27.151:5000/api/products')
+  .then(response => response.json())
+  .then(products => {
+    generateProductCards(products);
+  })
+  .catch(error => console.error('Error fetching products:', error));
+
+// Function to generate product cards
+function generateProductCards(products) {
+  let productsHTML = '';
+
+  products.forEach(product => {
+    productsHTML += `
+      <div class="col mb-5">
+        <div class="card h-100 product-card">
+          <img class="card-img-top" src="${product.image_url}" alt="..." />
+          <div class="card-body p-4">
+            <div class="text-center">
+              <h5 class="fw-bolder">${product.name}</h5>
+              Rp. ${product.price}
             </div>
           </div>
-        `;
-        productsContainer.innerHTML += productHTML;
-      });
-    });
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="product.html?product_id=${product.product_id}">View Details</a></div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  const productsContainer = document.querySelector('.row');
+  productsContainer.innerHTML = productsHTML;
+}
 });
   </script>
 </body>
