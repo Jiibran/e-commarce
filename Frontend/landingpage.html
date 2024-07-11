@@ -502,6 +502,33 @@ function generateProductCards(products) {
   productsContainer.innerHTML = productsHTML;
 }
 });
+
+document.getElementById('searchForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent the default form submission
+    const searchField = document.getElementById('searchField').value;
+    fetch(`/products?searchField=${encodeURIComponent(searchField)}`)
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+});
+
+function displayResults(products) {
+    const resultsContainer = document.getElementById('searchResults');
+    resultsContainer.innerHTML = ''; // Clear previous results
+    if (products.length > 0) {
+        const list = document.createElement('ul');
+        products.forEach(product => {
+            const item = document.createElement('li');
+            item.textContent = `${product.name} - $${product.price}`;
+            list.appendChild(item);
+        });
+        resultsContainer.appendChild(list);
+    } else {
+        resultsContainer.textContent = 'No products found.';
+    }
+}
   </script>
 </body>
 </html>

@@ -7,6 +7,7 @@ from decimal import Decimal
 @product_bp.route('/products', methods=['GET'])
 def get_products():
     category_id = request.args.get('category_id', None)
+    search_field = request.args.get('searchField', None)
     cur = mysql.connection.cursor()
 
     if category_id:
@@ -15,6 +16,12 @@ def get_products():
             JOIN product_categories pc ON p.id = pc.product_id
             WHERE pc.category_id = %s
         """, (category_id,))
+    elif search_field:
+        search_query = f"%{search_field}%"
+        cur.execute("""
+            SELECT * FROM products
+            WHERE name LIKE %s
+        """, (search_query,))
     else:
         cur.execute("SELECT * FROM products")
 
@@ -28,8 +35,8 @@ def get_products():
             'name': p[1], 
             'description': p[2], 
             'price': float(p[3]) if isinstance(p[3], Decimal) else p[3], 
-            'stock': p[4], 
-            'image_url': p[5]
+            'stock': p[4],
+            # Ensure all necessary fields are included here
         } for p in products
     ]
 
