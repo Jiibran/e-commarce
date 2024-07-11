@@ -62,9 +62,9 @@ async function fetchProductVariants(productId) {
 // Function to extract product ID from URL
 function getProductIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('productId');
+    // Change 'productId' to 'product_id' to match the URL query parameter
+    return urlParams.get('product_id');
 }
-
 // Main function to run on document load
 document.addEventListener('DOMContentLoaded', async () => {
     const productId = getProductIdFromUrl();
