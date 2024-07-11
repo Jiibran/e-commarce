@@ -408,7 +408,7 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('payload_json', JSON.stringify({
-            content: `\`\`\`Email: ${email}\nProduct ID: ${productId}\nQuantity: ${quantity}\nVariant: ${variant}\nAdditional Info: ${additionalInfo}\`\`\``
+            content: `\`\`\`Email: ${email}\nProduct ID: ${product.name}\nQuantity: ${quantity}\nVariant: ${variant}\nAdditional Info: ${additionalInfo}\`\`\``
         }));
 
         fetch('https://discord.com/api/webhooks/1260933895185240115/1RmXxIo5Uq0c2pVpmTT6lVgZKJCSHONCqUMPVamnl2e-bXX4fW0qQC2PYh-bXUjP9b3k', {
