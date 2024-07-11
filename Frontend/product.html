@@ -63,7 +63,7 @@
         // Example: Display the first variant's details
         // You can adjust this to display all variants as needed
         const firstVariant = variants[0];
-        document.getElementById('variant-name').textContent = firstVariant.name || 'Default Name';
+        document.getElementById('variant-name').textContent = firstVariant.variant_name || 'Default Name';
         document.getElementById('variant-image').src = firstVariant.image_url || 'default-variant-image.jpg';
         document.getElementById('variant-description').textContent = firstVariant.description || 'Default Description';
         document.getElementById('variant-price').textContent = `$${firstVariant.price || '0.00'}`;
